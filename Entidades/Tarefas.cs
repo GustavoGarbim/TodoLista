@@ -27,15 +27,15 @@ namespace TODOList.Entidades
         {
             if(Status == Status.Feito)
             {
-                return $"\"[✅]\" {Status} {IdTarefa} - {TituloTarefa}";
+                return $"[X] Status: {Status} - ID: {IdTarefa} - Titulo: {TituloTarefa}";
             }
             else if (Status == Status.Fazendo)
             {
-                return $"\"[⏳]\" {Status} {IdTarefa} - {TituloTarefa}";
+                return $"[-] Status: {Status} - ID: {IdTarefa} - Titulo: {TituloTarefa}";
             }
             else
             {
-                return $"\"[ ]\" {Status} - {IdTarefa} - {TituloTarefa}";
+                return $"[ ] Status: {Status} - ID: {IdTarefa} - Titulo: {TituloTarefa}";
             }
         }
     }

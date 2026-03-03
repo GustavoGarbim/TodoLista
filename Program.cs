@@ -1,8 +1,6 @@
-﻿using TODOList.Entidades;
-using TODOList.Funcionalidades;
+﻿using TODOList.Funcionalidades;
 
-Tarefas tarefa = new Tarefas();
-TarefasFuncionalidades _ = new TarefasFuncionalidades();
+TarefasFuncionalidades Servico = new TarefasFuncionalidades();
 
 while (true)
 {
@@ -44,11 +42,11 @@ $$$$$$$$\  $$$$$$\  $$$$$$$\   $$$$$$\  $$\       $$\             $$\
     switch (resposta)
     {
         case "1":
-            _.CriarTarefa();
+            Servico.CriarTarefa();
             break;
 
         case "2":
-            var tarefaBuscada = _.BuscarTarefa();
+            var tarefaBuscada = Servico.BuscarTarefa();
             if (tarefaBuscada != null)
             {
                 Console.Clear();
@@ -67,17 +65,17 @@ $$$$$$$$\  $$$$$$\  $$$$$$$\   $$$$$$\  $$\       $$\             $$\
             break;
 
         case "3":
-            _.EditarTarefa();
+            Servico.EditarTarefa();
             break;
 
         case "4":
             Console.Clear();
             Console.WriteLine("Sua lista de Tarefas: ");
-            _.ListarTarefas();
+            Servico.ListarTarefas();
             break;
 
         case "5":
-            _.ExcluirTarefa();
+            Servico.ExcluirTarefa();
             break;
 
         case "0":
