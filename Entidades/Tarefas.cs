@@ -11,8 +11,6 @@ namespace TODOList.Entidades
         public DateTime DataAbertura { get; set; }
         public TimeOnly EstimativaHoras { get; set; }
 
-        List<Tarefas> ListaDeTarefas = new();
-
         public Tarefas(){ }
 
         public Tarefas(int idTarefa, string tituloTarefa, string descricao, Status status, TimeOnly estimativaHoras)
@@ -25,41 +23,19 @@ namespace TODOList.Entidades
             EstimativaHoras = estimativaHoras;
         }
 
-        public void CriarTarefa(int idTarefa, string tituloTarefa, string descricao, Status status, TimeOnly estimativaHoras)
+        public override string ToString()
         {
-            var tarefa = new Tarefas(idTarefa, tituloTarefa, descricao, status, estimativaHoras);
-            ListaDeTarefas.Add(tarefa);
-        }
-
-        public Tarefas? BuscarTarefa(int idTarefa)
-        {
-            try
+            if(Status == Status.Feito)
             {
-                var tarefa = ListaDeTarefas.Find(c => c.IdTarefa == idTarefa);
-                return tarefa;
+                return $"\"[✅]\" {Status} {IdTarefa} - {TituloTarefa}";
             }
-            catch(Exception ex)
+            else if (Status == Status.Fazendo)
             {
-                return null;
+                return $"\"[⏳]\" {Status} {IdTarefa} - {TituloTarefa}";
             }
-        }
-
-        public void EditarTarefa(int idTarefa, string? tituloTarefa, string? descricao)
-        {
-            var tarefa = BuscarTarefa(idTarefa);
-            if(tarefa != null)
+            else
             {
-                tarefa.TituloTarefa = tituloTarefa;
-                tarefa.Descricao = descricao;
-            }
-        }
-
-        public void EditarTarefa(int idTarefa, TimeOnly estimativaHoras)
-        {
-            var tarefa = BuscarTarefa(idTarefa);
-            if (tarefa != null)
-            {
-                tarefa.EstimativaHoras = estimativaHoras;
+                return $"\"[ ]\" {Status} - {IdTarefa} - {TituloTarefa}";
             }
         }
     }

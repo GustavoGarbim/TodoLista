@@ -1,29 +1,90 @@
 ﻿using TODOList.Entidades;
+using TODOList.Funcionalidades;
 
 Tarefas tarefa = new Tarefas();
-
-tarefa.CriarTarefa(890, "Primeira Tarefa", "Tarefa muito legal", 0, new TimeOnly(12, 10, 10));
-var buscar = tarefa.BuscarTarefa(890);
-
-Console.WriteLine(buscar.TituloTarefa);
-
+TarefasFuncionalidades _ = new TarefasFuncionalidades();
 
 while (true)
 {
-    Console.WriteLine("BEM-VINDO(A) AO TODO LIST");
+    Console.Clear();
+    Console.WriteLine(@" 
+
+$$$$$$$$\  $$$$$$\  $$$$$$$\   $$$$$$\  $$\       $$\             $$\     
+\__$$  __|$$  __$$\ $$  __$$\ $$  __$$\ $$ |      \__|            $$ |    
+   $$ |   $$ /  $$ |$$ |  $$ |$$ /  $$ |$$ |      $$\  $$$$$$$\ $$$$$$\   
+   $$ |   $$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |      $$ |$$  _____|\_$$  _|  
+   $$ |   $$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |      $$ |\$$$$$$\    $$ |    
+   $$ |   $$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |      $$ | \____$$\   $$ |$$\ 
+   $$ |    $$$$$$  |$$$$$$$  | $$$$$$  |$$$$$$$$\ $$ |$$$$$$$  |  \$$$$  |
+   \__|    \______/ \_______/  \______/ \________|\__|\_______/    \____/ 
+                                                                   
+    ");
+
     Console.WriteLine("Selecione sua opção");
     Console.WriteLine("1 - Criar Tarefa");
     Console.WriteLine("2 - Buscar Tarefa Pelo Id");
-    Console.WriteLine("3 - Listar Tarefas");
-    Console.WriteLine("4 - Deletar Tarefa");
+    Console.WriteLine("3 - Editar Tarefa");
+    Console.WriteLine("4 - Listar Tarefas");
+    Console.WriteLine("5 - Deletar Tarefa");
+    Console.WriteLine("0 - Sair");
+
+    Console.Write("\nSua opção: ");
 
     var resposta = Console.ReadLine();
+
     if(resposta != null)
-    {
-        if(resposta == "1")
+        if(resposta == "0" || resposta == "1" || resposta == "2" || resposta == "3" || resposta == "4" || resposta == "5")
+            Console.WriteLine("Opção selecionada: " + resposta);
+        else
         {
-            
+            Console.WriteLine("Opção inválida. Pressione qualquer tecla para tentar novamente...");
+            Console.ReadKey();
+            continue;
         }
+    switch (resposta)
+    {
+        case "1":
+            _.CriarTarefa();
+            break;
+
+        case "2":
+            var tarefaBuscada = _.BuscarTarefa();
+            if (tarefaBuscada != null)
+            {
+                Console.Clear();
+                Console.WriteLine("Sua tarefa buscada: ");
+                Console.WriteLine($"\nId: {tarefaBuscada.IdTarefa}");
+                Console.WriteLine($"Título: {tarefaBuscada.TituloTarefa}");
+                Console.WriteLine($"Descrição: {tarefaBuscada.Descricao}");
+                Console.WriteLine($"Status: {tarefaBuscada.Status}");
+                Console.WriteLine($"Data de Abertura: {tarefaBuscada.DataAbertura}");
+                Console.WriteLine($"Estimativa de Horas: {tarefaBuscada.EstimativaHoras}");
+            }
+            else
+            {
+                Console.WriteLine("Tarefa não encontrada.");
+            }
+            break;
+
+        case "3":
+            _.EditarTarefa();
+            break;
+
+        case "4":
+            Console.Clear();
+            Console.WriteLine("Sua lista de Tarefas: ");
+            _.ListarTarefas();
+            break;
+
+        case "5":
+            _.ExcluirTarefa();
+            break;
+
+        case "0":
+            Console.WriteLine("Saindo...");
+            return;
     }
 
+    Console.WriteLine("\nPressione qualquer tecla para continuar...");
+    Console.ReadKey();
 }
