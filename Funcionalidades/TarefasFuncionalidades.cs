@@ -7,34 +7,63 @@ namespace TODOList.Funcionalidades
     {
         List<Tarefas> ListaDeTarefas = new();
 
+        public void TesteAdicionar3Tarefas()
+        {
+            var tarefa1 = new Tarefas(Random.Shared.Next(1000, 2000), "Tarefa 1", "Descrição da Tarefa 1", Status.Fazer, TimeOnly.Parse("02:00"));
+            var tarefa2 = new Tarefas(Random.Shared.Next(1000, 2000), "Tarefa 2", "Descrição da Tarefa 2", Status.Fazendo, TimeOnly.Parse("01:30"));
+            var tarefa3 = new Tarefas(Random.Shared.Next(1000, 2000), "Tarefa 3", "Descrição da Tarefa 3", Status.Feito, TimeOnly.Parse("00:45"));
+            ListaDeTarefas.Add(tarefa1);
+            ListaDeTarefas.Add(tarefa2);
+            ListaDeTarefas.Add(tarefa3);
+        }
+
         public void CriarTarefa()
         {
-            Console.Clear();
-            int idTarefa = Random.Shared.Next(1, 1000);
-
-            Console.Write("\nDigite o Titulo da Tarefa: ");
-            string tituloTarefa = Console.ReadLine();
-
-            if (tituloTarefa == "" || tituloTarefa == null)
+            try
             {
-                Console.WriteLine("Titulo da tarefa não pode ser vazio. Tarefa não criada.");
-                return;
+                Console.Clear();
+                int idTarefa = Random.Shared.Next(1, 1000);
+
+                while(ListaDeTarefas.Any(t => t.IdTarefa == idTarefa))
+                {
+                    idTarefa = Random.Shared.Next(1, 1000);
+                }
+
+                Console.Write("\nDigite o Titulo da Tarefa: ");
+                string tituloTarefa = Console.ReadLine();
+
+                if (tituloTarefa == "" || tituloTarefa == null)
+                {
+                    Console.WriteLine("Titulo da tarefa não pode ser vazio. Tarefa não criada.");
+                    return;
+                }
+
+                Console.Write("\nDigite a Descrição da Tarefa: ");
+                string descricao = Console.ReadLine();
+
+                Console.Write("\nDigite a Estimativa de Horas para a Tarefa (HH:mm): ");
+                TimeOnly estimativaHoras = TimeOnly.Parse(Console.ReadLine());
+
+                var tarefa = new Tarefas(idTarefa, tituloTarefa, descricao, Status.Fazer, estimativaHoras);
+                ListaDeTarefas.Add(tarefa);
+
+                Console.WriteLine($"\nTarefa: {tituloTarefa} criada com sucesso! ID: {idTarefa}");
             }
-
-            Console.Write("\nDigite a Descrição da Tarefa: ");
-            string descricao = Console.ReadLine();
-
-            Console.Write("\nDigite a Estimativa de Horas para a Tarefa (HH:mm): ");
-            TimeOnly estimativaHoras = TimeOnly.Parse(Console.ReadLine());
-            var tarefa = new Tarefas(idTarefa, tituloTarefa, descricao, Status.Fazer, estimativaHoras);
-            ListaDeTarefas.Add(tarefa);
-            Console.WriteLine($"\nTarefa: {tituloTarefa} criada com sucesso! ID: {idTarefa}");
+            catch (Exception ex) {
+                Console.WriteLine("Não foi possivel criar a tarefa. Revise os campos e tente novamente.");
+            }
         }
 
         public void MudarStatusTarefa(int idTarefa)
         {
 
             var tarefa = BuscarTarefa(idTarefa);
+
+            if(tarefa == null)
+            {
+                Console.WriteLine("Tarefa não encontrada para mudança de status.");
+                return;
+            }
 
             Console.WriteLine($"\nDigite o novo Status para a tarefa ({tarefa.TituloTarefa}): ");
             foreach (var status in Enum.GetValues<Status>())
@@ -46,13 +75,15 @@ namespace TODOList.Funcionalidades
 
             if (tarefa != null)
             {
-                tarefa.Status = novoStatus;
-                Console.WriteLine($"Status da tarefa com ID {idTarefa} atualizado para {novoStatus}.");
-            }
-
-            if (novoStatus != Status.Fazer || novoStatus != Status.Fazendo || novoStatus != Status.Feito)
-            {
-                Console.WriteLine($"Status '{novoStatus}, não é válido.'");
+                if(novoStatus == Status.Fazer || novoStatus == Status.Fazendo || novoStatus == Status.Feito)
+                {
+                    tarefa.Status = novoStatus;
+                    Console.WriteLine($"Status da tarefa com ID {idTarefa} atualizado para {novoStatus}.");
+                }
+                else
+                {
+                    Console.WriteLine($"Status '{novoStatus}' inválido.");
+                }
             }
             else
             {
@@ -68,11 +99,19 @@ namespace TODOList.Funcionalidades
             {
                 int idBusca = int.Parse(Console.ReadLine());
                 var tarefa = ListaDeTarefas.Find(c => c.IdTarefa == idBusca);
-                return tarefa;
+                if(tarefa != null)
+                {
+                    return tarefa;
+                }
+                else
+                {
+                    Console.WriteLine("Tarefa não encontrada");
+                    return null;
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Erro ao buscar tarefa: " + ex.Message);
+                Console.WriteLine("Erro ao buscar tarefa. Revise os campos e tente novamente");
                 return null;
             }
         }
@@ -82,7 +121,15 @@ namespace TODOList.Funcionalidades
             try
             {
                 var tarefa = ListaDeTarefas.Find(c => c.IdTarefa == idBusca);
-                return tarefa;
+                if(tarefa != null)
+                {
+                    return tarefa;
+                }
+                else
+                {
+                    Console.WriteLine("Tarefa com ID " + idBusca + " não encontrada.");
+                    return null;
+                }
             }
             catch (Exception ex)
             {
@@ -102,7 +149,21 @@ namespace TODOList.Funcionalidades
             {
                 foreach (Tarefas tarefa in ListaDeTarefas)
                 {
-                    Console.WriteLine(tarefa);
+                    if(tarefa.Status == Status.Fazer)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(tarefa);
+                    }
+                    else if(tarefa.Status == Status.Fazendo)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine(tarefa);
+                    }
+                    else if(tarefa.Status == Status.Feito)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine(tarefa);
+                    }
                 }
             }
         }
@@ -115,6 +176,11 @@ namespace TODOList.Funcionalidades
             {
                 Console.Write("Digite o ID da tarefa que deseja editar: ");
                 var idBusca = int.Parse(Console.ReadLine());
+                var tarefa = BuscarTarefa(idBusca);
+                if(tarefa == null)
+                {
+                    return;
+                }
 
                 Console.WriteLine("\nDigite sua opção: ");
                 Console.WriteLine("\n(1) - Editar Titulo/Descrição");
@@ -126,7 +192,6 @@ namespace TODOList.Funcionalidades
 
                 if (resposta == "1")
                 {
-                    var tarefa = BuscarTarefa(idBusca);
                     Console.Write("Digite o novo Titulo da Tarefa (dê ENTER se não deseja alterar): ");
                     var tituloTarefa = Console.ReadLine();
                     if (tituloTarefa != "")
@@ -157,7 +222,7 @@ namespace TODOList.Funcionalidades
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Erro ao editar tarefa: " + ex);
+                Console.WriteLine("Erro ao editar tarefa. Revise os campos e tente novamente.");
             }
         }
 
@@ -209,7 +274,7 @@ namespace TODOList.Funcionalidades
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Erro ao excluir tarefa: " + ex.Message);
+                Console.WriteLine("Erro ao excluir tarefa. Revise os campos e tente novamente.");
             }
         }
     }

@@ -5,6 +5,10 @@ TarefasFuncionalidades Servico = new TarefasFuncionalidades();
 while (true)
 {
     Console.Clear();
+
+    // Define a cor do texto para Amarelo
+    Console.ForegroundColor = ConsoleColor.Yellow;
+
     Console.WriteLine(@" 
 
 $$$$$$$$\  $$$$$$\  $$$$$$$\   $$$$$$\  $$\       $$\             $$\     
@@ -25,13 +29,14 @@ $$$$$$$$\  $$$$$$\  $$$$$$$\   $$$$$$\  $$\       $$\             $$\
     Console.WriteLine("4 - Listar Tarefas");
     Console.WriteLine("5 - Deletar Tarefa");
     Console.WriteLine("0 - Sair");
+    Console.WriteLine("\n10 - Adicionar 3 tarefas para testes");
 
     Console.Write("\nSua opção: ");
 
     var resposta = Console.ReadLine();
 
     if(resposta != null)
-        if(resposta == "0" || resposta == "1" || resposta == "2" || resposta == "3" || resposta == "4" || resposta == "5")
+        if(resposta == "0" || resposta == "1" || resposta == "2" || resposta == "3" || resposta == "4" || resposta == "5" || resposta == "10")
             Console.WriteLine("Opção selecionada: " + resposta);
         else
         {
@@ -60,7 +65,7 @@ $$$$$$$$\  $$$$$$\  $$$$$$$\   $$$$$$\  $$\       $$\             $$\
             }
             else
             {
-                Console.WriteLine("Tarefa não encontrada.");
+                break;
             }
             break;
 
@@ -78,11 +83,16 @@ $$$$$$$$\  $$$$$$\  $$$$$$$\   $$$$$$\  $$\       $$\             $$\
             Servico.ExcluirTarefa();
             break;
 
+        case "10":
+            Servico.TesteAdicionar3Tarefas();
+            Console.WriteLine("Adicionando Tarefas...");
+            break;
+
         case "0":
             Console.WriteLine("Saindo...");
             return;
     }
-
+    Console.ForegroundColor = ConsoleColor.DarkGreen;
     Console.WriteLine("\nPressione qualquer tecla para continuar...");
     Console.ReadKey();
 }
